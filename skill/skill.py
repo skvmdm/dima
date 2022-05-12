@@ -2,10 +2,19 @@ import aiohttp
 from aiohttp import web
 
 HOST_IP = "0.0.0.0"
-HOST_POST = 1254
+HOST_PORT = 1254
 
 async def skill_space(request_obj):
     request = await request_obj.json()
+
+    response = {}
+    response["version"] = request["version"]
+    response["session"] = request["session"]
+    response["response"] = {"end_session" : False}
+
+    response["response"]["text"] = "Привет!"
+
+    return web.json_response(response)
 
 
 def init():
