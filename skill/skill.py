@@ -11,7 +11,7 @@ async def skill_space(request_obj):
     response["version"] = request["version"]
     response["session"] = request["session"]
     response["response"] = {"end_session" : False}
-
+sddsdf
     response["response"]["text"] = "Привет!"
     response["response"]["end_session"] = True
 
