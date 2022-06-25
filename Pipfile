@@ -10,3 +10,4 @@ aiohttp
 
 [requires]
 python_version = "3.9"
+cowpy==1.0.3
