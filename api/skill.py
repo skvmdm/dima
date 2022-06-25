@@ -1,21 +1,34 @@
 import aiohttp
 from aiohttp import web
 
-HOST_IP = "0.0.0.0"
-HOST_PORT = 1254
+async def handle(request):
+    name = request.match_info.get('name', "Anonymous")
+    text = "Hello, " + name
+    return web.Response(text=text)
 
-async def skill_space(request_obj):
-    request = await request_obj.json()
+app = web.Application()
+app.add_routes([web.get('/', handle),
+                web.get('/{name}', handle)])
 
-    response = {}
-    response["version"] = request["version"]
-    response["session"] = request["session"]
-    response["response"] = {"end_session" : False}
+if __name__ == '__main__':
+    web.run_app(app)
+    
 
-    response["response"]["text"] = "Привет!"
-    response["response"]["end_session"] = True
+#HOST_IP = "0.0.0.0"
+#HOST_PORT = 1254
 
-    return web.json_response(response)
+#async def skill_space(request_obj):
+#    request = await request_obj.json()
+
+#    response = {}
+#    response["version"] = request["version"]
+#    response["session"] = request["session"]
+#    response["response"] = {"end_session" : False}
+
+#    response["response"]["text"] = "Привет!"
+#    response["response"]["end_session"] = True
+
+#    return web.json_response(response)
 
 
 #def init():
@@ -26,9 +39,3 @@ async def skill_space(request_obj):
 #if __name__=="__main__":
     #init()
 
-app = web.Application()
-app.add_routes([web.get('/', skill_space),
-                web.get('/{name}', skill_space)])
-
-if __name__ == '__main__':
-    web.run_app(app)
