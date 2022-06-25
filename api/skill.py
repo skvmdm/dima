@@ -1,14 +1,13 @@
 import aiohttp
 from aiohttp import web
 
-async def handle(request):
+async def skill_space(request):
     name = request.match_info.get('name', "Anonymous")
     text = "Hello, " + name
     return web.Response(text=text)
 
 app = web.Application()
-app.add_routes([web.get('/', handle),
-                web.get('/{name}', handle)])
+app.router.add_post("/skill_space", skill_space)
 
 if __name__ == '__main__':
     web.run_app(app)
