@@ -13,6 +13,7 @@ async def skill_space(request_obj):
     response["response"] = {"end_session" : False}
 
     response["response"]["text"] = "Привет!"
+    response["response"]["end_session"] = True
 
     return web.json_response(response)
 
