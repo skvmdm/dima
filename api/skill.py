@@ -17,11 +17,11 @@ async def skill(request_obj):
     return web.json_response(response)
 
 
-def init():
-    app = web.Application()
-    app.router.add_post("/skill", skill)
-    web.run_app(app)
+#def init():
+app = web.Application()
+app.router.add_post("/api/skill", skill)
+
     #web.run_app(app, host = HOST_IP, port = HOST_PORT)
 
 if __name__=="__main__":
-    init()
+    web.run_app(app)

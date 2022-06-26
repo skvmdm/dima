@@ -1,15 +1,27 @@
-from flask import Flask
+import aiohttp
+from aiohttp import web
+
+HOST_IP = "0.0.0.0"
+HOST_PORT = 1254
+
+async def test(request_obj):
+    request = await request_obj.json()
+
+    response = {}
+    response["version"] = request["version"]
+    response["session"] = request["session"]
+    response["response"] = {"end_session" : False}
+    response["response"]["text"] = "Привет!"
+    response["response"]["end_session"] = True
+
+    return web.json_response(response)
 
 
-app = Flask(__name__)
+#def init():
+app = web.Application()
+app.router.add_post("/api/test", test)
 
+    #web.run_app(app, host = HOST_IP, port = HOST_PORT)
 
-@app.route('/')
-def home():
-    return 'Home Page Route - nice work Andrew!!!'
-
-
-@app.route('/test')
-def about():
-    return 'test Page Route'
-
+if __name__=="__main__":
+    web.run_app(app)
