@@ -1,8 +1,32 @@
 import aiohttp
+import json
 from aiohttp import web
+from aiohttp_wsgi import WSGIHandler
 
 HOST_IP = "0.0.0.0"
 HOST_PORT = 1254
+
+def noop_application(environ, start_response):
+    request_body = environ['wsgi.input'].read() # returns bytes object
+    request = json.loads(request_body)
+    
+    readstr = request_body.decode('utf-8') 
+    status = '200 OK'
+    #output = b'Hello World!\n'
+
+    response = {}
+    response["version"] = request["version"]
+    response["session"] = request["session"]
+    response["response"] = {"end_session" : False}
+    response["response"]["text"] = "Привет!"
+    response["response"]["end_session"] = True
+
+    output = json.dumps(response).encode('utf-8')
+
+    response_headers = [('Content-type', 'text/plain'),
+                  ('Content-Length', str(len(output)))]
+    start_response(status, response_headers)
+    return [output]
 
 async def test(request_obj):
     request = await request_obj.json()
@@ -17,11 +41,11 @@ async def test(request_obj):
     return web.json_response(response)
 
 
-#def init():
-app = web.Application()
-app.router.add_post("/api/test", test)
-
-    #web.run_app(app, host = HOST_IP, port = HOST_PORT)
 
 if __name__=="__main__":
+    wsgi_handler = WSGIHandler(noop_application)
+    app = web.Application()
+    app.router.add_route("*", "/{path_info:hello.*}", wsgi_handler)
+    app.router.add_post("/test", test)
+    app.router.add_post("/api/test", test)
     web.run_app(app)
