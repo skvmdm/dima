@@ -1,0 +1,18 @@
+{
+    "builds": [
+      {
+        "src": "** /*.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/test",
+        "dest": "api/test.py"
+      },
+      {
+        "src": "/flask",
+        "dest": "api/flask.py"
+      }
+    ]
+  }
