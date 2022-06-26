@@ -43,12 +43,12 @@ async def test(request_obj):
 wsgi_handler = WSGIHandler(noop_application)
 test_wsgi_handler = WSGIHandler(test)
 app = web.Application()
+app.router.add_route("*", "/{path_info:hello.*}", wsgi_handler)
+app.router.add_route("*", "/{path_info:test.*}", test_wsgi_handler)
+app.router.add_post("/hello", wsgi_handler)
+app.router.add_post("/api/hello", wsgi_handler)
+app.router.add_post("/test", test_wsgi_handler)
+app.router.add_post("/api/test", test_wsgi_handler)
 
 if __name__=="__main__":
-    app.router.add_route("*", "/{path_info:hello.*}", wsgi_handler)
-    app.router.add_route("*", "/{path_info:test.*}", test_wsgi_handler)
-    app.router.add_post("/hello", wsgi_handler)
-    app.router.add_post("/apihello", wsgi_handler)
-    app.router.add_post("/test", test_wsgi_handler)
-    app.router.add_post("/api/test", test_wsgi_handler)
     web.run_app(app)
