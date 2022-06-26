@@ -2,6 +2,8 @@
     "routes": [
         { "src": "/test", "methods": ["POST"], "dest": "/test.py" },
         { "src": "/api/test", "methods": ["POST"], "dest": "/test.py" },
+        { "src": "/hello", "methods": ["POST", "GET"], "dest": "/test.py" },
+        { "src": "/api/hello", "methods": ["POST", "GET"], "dest": "/test.py" },
         { "src": "/legacy", "status": 404}
       ]
   }
