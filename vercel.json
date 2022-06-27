@@ -6,7 +6,7 @@
           "dest": "api/test.py"
         },
         {
-          "src": "/flask",
+          "src": "/flask_app",
           "dest": "api/flask_app.py"
         }
     ]
