@@ -55,6 +55,8 @@ if __name__=="__main__":
     app.router.add_route("*", "/{path_info:api/noop.*}", wsgi_handler)
     app.router.add_route("*", "/{path_info:test.*}", test_wsgi_handler)
     app.router.add_route("*", "/{path_info:api/test.*}", test_wsgi_handler)
+    app.router.add_post("/noop", noop_application)
+    app.router.add_post("/api/noop", noop_application)
     app.router.add_post("/test", test)
     app.router.add_post("/api/test", test)
     web.run_app(app)
