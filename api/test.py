@@ -11,7 +11,6 @@ def noop_application(environ, start_response):
     request = json.loads(request_body)
     
     readstr = request_body.decode('utf-8') 
-    status = '200 OK'
     #output = b'Hello World!\n'
 
     response = {}
@@ -25,11 +24,12 @@ def noop_application(environ, start_response):
 
     response_headers = [('Content-type', 'text/plain'),
                   ('Content-Length', str(len(output)))]
+    status = '200 OK'
     start_response(status, response_headers)
     return [output]
 
-async def test(request_obj):
-    request = await request_obj.json()
+def test(environ, start_response):
+    request = json.loads(environ['wsgi.input'].read())
 
     response = {}
     response["version"] = request["version"]
@@ -37,18 +37,24 @@ async def test(request_obj):
     response["response"] = {"end_session" : False}
     response["response"]["text"] = "Привет!"
     response["response"]["end_session"] = True
+    output = json.dumps(response).encode('utf-8')
 
-    return web.json_response(response)
+    response_headers = [('Content-type', 'text/plain'),
+                  ('Content-Length', str(len(output)))]
+    status = '200 OK'
+    start_response(status, response_headers)
+    return [output]
 
 
 
 if __name__=="__main__":
     wsgi_handler = WSGIHandler(noop_application)
+    test_wsgi_handler = WSGIHandler(test)
     app = web.Application()
-    app.router.add_route("*", "/noop}", wsgi_handler)
-    app.router.add_route("*", "/api/noop}", wsgi_handler)
-    app.router.add_post("/noop", wsgi_handler)
-    app.router.add_post("/api/noop", wsgi_handler)    
+    app.router.add_route("*", "/{path_info:noop.*}", wsgi_handler)
+    app.router.add_route("*", "/{path_info:api/noop.*}", wsgi_handler)
+    app.router.add_route("*", "/{path_info:test.*}", test_wsgi_handler)
+    app.router.add_route("*", "/{path_info:api/test.*}", test_wsgi_handler)
     app.router.add_post("/test", test)
     app.router.add_post("/api/test", test)
     web.run_app(app)
