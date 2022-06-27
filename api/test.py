@@ -45,7 +45,9 @@ async def test(request_obj):
 if __name__=="__main__":
     wsgi_handler = WSGIHandler(noop_application)
     app = web.Application()
-    app.router.add_route("*", "/{path_info:hello.*}", wsgi_handler)
+    app.router.add_route("*", "/{path_info:noop.*}", wsgi_handler)
+    app.router.add_post("/noop", wsgi_handler)
+    app.router.add_post("/api/noop", wsgi_handler)    
     app.router.add_post("/test", test)
     app.router.add_post("/api/test", test)
     web.run_app(app)
