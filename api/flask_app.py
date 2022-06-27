@@ -6,7 +6,7 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello from Flask!'
 
-@app.route('/privet', methods = ['POST'])
+@app.route('/flask_app', methods = ['POST'])
 def update_text():
     content = request.json
     status = '200 OK'
